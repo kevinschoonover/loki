@@ -14,7 +14,7 @@ local utils = import 'mixin-utils/utils.libsonnet';
         $.row('Frontend (cortex_gw)')
         .addPanel(
           $.panel('QPS') +
-          $.qpsPanel('loki_request_duration_seconds_count{%s route=~"%s"}' % [$.jobMatcher($._config.job_names.gateway), http_routes])
+          $.qpsPanel('loki_request_duration_seconds_count{%s, route=~"%s"}' % [$.jobMatcher($._config.job_names.gateway), http_routes])
         )
         .addPanel(
           $.panel('Latency') +
@@ -29,7 +29,7 @@ local utils = import 'mixin-utils/utils.libsonnet';
         $.row('Frontend (query-frontend)')
         .addPanel(
           $.panel('QPS') +
-          $.qpsPanel('loki_request_duration_seconds_count{%s route=~"%s"}' % [$.jobMatcher($._config.job_names.query_frontend), http_routes])
+          $.qpsPanel('loki_request_duration_seconds_count{%s, route=~"%s"}' % [$.jobMatcher($._config.job_names.query_frontend), http_routes])
         )
         .addPanel(
           $.panel('Latency') +
@@ -44,7 +44,7 @@ local utils = import 'mixin-utils/utils.libsonnet';
         $.row('Querier')
         .addPanel(
           $.panel('QPS') +
-          $.qpsPanel('loki_request_duration_seconds_count{%s route=~"%s"}' % [$.jobMatcher($._config.job_names.querier), http_routes])
+          $.qpsPanel('loki_request_duration_seconds_count{%s, route=~"%s"}' % [$.jobMatcher($._config.job_names.querier), http_routes])
         )
         .addPanel(
           $.panel('Latency') +
@@ -59,7 +59,7 @@ local utils = import 'mixin-utils/utils.libsonnet';
         $.row('Ingester')
         .addPanel(
           $.panel('QPS') +
-          $.qpsPanel('loki_request_duration_seconds_count{%s route=~"%s"}' % [$.jobMatcher($._config.job_names.ingester), grpc_routes])
+          $.qpsPanel('loki_request_duration_seconds_count{%s, route=~"%s"}' % [$.jobMatcher($._config.job_names.ingester), grpc_routes])
         )
         .addPanel(
           $.panel('Latency') +
@@ -74,7 +74,7 @@ local utils = import 'mixin-utils/utils.libsonnet';
         $.row('BigTable')
         .addPanel(
           $.panel('QPS') +
-          $.qpsPanel('cortex_bigtable_request_duration_seconds_count{%s operation="/google.bigtable.v2.Bigtable/ReadRows"}' % $.jobMatcher($._config.job_names.querier))
+          $.qpsPanel('cortex_bigtable_request_duration_seconds_count{%s, operation="/google.bigtable.v2.Bigtable/ReadRows"}' % $.jobMatcher($._config.job_names.querier))
         )
         .addPanel(
           $.panel('Latency') +
@@ -88,11 +88,11 @@ local utils = import 'mixin-utils/utils.libsonnet';
         $.row('BoltDB Shipper')
         .addPanel(
           $.panel('QPS') +
-          $.qpsPanel('loki_boltdb_shipper_request_duration_seconds_count{%s operation="QUERY"}' % $.jobMatcher($._config.job_names.index_gateway))
+          $.qpsPanel('loki_boltdb_shipper_request_duration_seconds_count{%s, operation="QUERY"}' % $.jobMatcher($._config.job_names.index_gateway))
         )
         .addPanel(
           $.panel('Latency') +
-          $.latencyPanel('loki_boltdb_shipper_request_duration_seconds', '{%s operation="QUERY"}' % $.jobMatcher($._config.job_names.index_gateway))
+          $.latencyPanel('loki_boltdb_shipper_request_duration_seconds', '{%s, operation="QUERY"}' % $.jobMatcher($._config.job_names.index_gateway))
         )
       ),
   },
