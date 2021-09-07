@@ -10,15 +10,15 @@ local utils = import 'mixin-utils/utils.libsonnet';
         .addTag()
         .addLog()
         .addRow(
-          $.row('Ressource Usage')
+          $.row('Resource Usage')
           .addPanel(
-            $.containerCPUUsagePanel('CPU', 'compactor'),
+            $.containerCPUUsagePanel('CPU', $._config.job_names.compactor),
           )
           .addPanel(
-            $.containerMemoryWorkingSetPanel('Memory (workingset)', 'compactor'),
+            $.containerMemoryWorkingSetPanel('Memory (workingset)', $._config.job_names.compactor),
           )
           .addPanel(
-            $.goHeapInUsePanel('Memory (go heap inuse)', 'compactor'),
+            $.goHeapInUsePanel('Memory (go heap inuse)', $._config.job_names.compactor),
           )
 
         )
@@ -94,7 +94,7 @@ local utils = import 'mixin-utils/utils.libsonnet';
         .addRow(
           $.row('Logs')
           .addPanel(
-            $.logPanel('Compactor Logs', '{container="compactor", %s}' % $.namespaceMatcher()),
+            $.logPanel('Compactor Logs', '{%s}' % $.jobMatcher($._config.job_names.compactor)),
           )
         ),
     },
