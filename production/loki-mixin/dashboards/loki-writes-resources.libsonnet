@@ -17,7 +17,7 @@ local utils = import 'mixin-utils/utils.libsonnet';
             $.containerMemoryWorkingSetPanel('Memory (workingset)', 'cortex-gw'),
           )
           .addPanel(
-            $.goHeapInUsePanel('Memory (go heap inuse)', 'cortex-gw'),
+            $.goHeapInUsePanel('Memory (go heap inuse)', $._config.job_names.gateway),
           )
         )
         .addRow(
@@ -29,7 +29,7 @@ local utils = import 'mixin-utils/utils.libsonnet';
             $.containerMemoryWorkingSetPanel('Memory (workingset)', 'distributor'),
           )
           .addPanel(
-            $.goHeapInUsePanel('Memory (go heap inuse)', 'distributor'),
+            $.goHeapInUsePanel('Memory (go heap inuse)', $._config.job_names.distributor),
           )
         )
         .addRow(
@@ -37,7 +37,7 @@ local utils = import 'mixin-utils/utils.libsonnet';
           .addPanel(
             $.panel('In-memory streams') +
             $.queryPanel(
-              'sum by(%s) (loki_ingester_memory_streams{%s})' % [$._config.per_instance_label, $.jobMatcher('ingester')],
+              'sum by(%s) (loki_ingester_memory_streams{%s})' % [$._config.per_instance_label, $.jobMatcher($._config.job_names.ingester)],
               '{{%s}}' % $._config.per_instance_label
             ) +
             {
@@ -54,7 +54,7 @@ local utils = import 'mixin-utils/utils.libsonnet';
             $.containerMemoryWorkingSetPanel('Memory (workingset)', 'ingester'),
           )
           .addPanel(
-            $.goHeapInUsePanel('Memory (go heap inuse)', 'ingester'),
+            $.goHeapInUsePanel('Memory (go heap inuse)', $._config.job_names.ingester),
           )
         )
         .addRow(
