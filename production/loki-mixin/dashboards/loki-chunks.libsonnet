@@ -14,7 +14,7 @@ local utils = import 'mixin-utils/utils.libsonnet';
         .addPanel(
           $.panel('Chunks per series') +
           $.queryPanel(
-            'sum(loki_ingester_memory_chunks{%s}) / sum(loki_ingester_memory_streams{job=~"%s"})' % [
+            'sum(loki_ingester_memory_chunks{%s}) / sum(loki_ingester_memory_streams{%s})' % [
               $.jobMatcher($._config.job_names.ingester),
               $.jobMatcher($._config.job_names.ingester),
             ],
