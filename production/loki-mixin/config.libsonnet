@@ -1,8 +1,10 @@
 {
   local makePrefix(groups) = std.join('_', groups),
   local makeGroupBy(groups) = std.join(', ', groups),
-
-  local group_by_cluster = makeGroupBy($._config.cluster_labels),
+  local makeAlertLabels(groups) = std.join('/', std.map(
+    function(l) '{{ $labels.%s }}' % l,
+    groups
+  )),
 
   _config+:: {
     // Tags for dashboards.
@@ -10,11 +12,18 @@
 
     singleBinary: false,
 
+    // The label used to differentiate between different nodes (i.e. servers).
+    per_node_label: 'instance',
+
+    // The label is used to differentiate between service namespaces
+    per_namespace_label: 'namespace',
+
+    // The label used to differentiate between different jobs (i.e. services).
+    per_job_label: 'job',
+
     // The label used to differentiate between different application instances (i.e. 'pod' in a kubernetes install).
     per_instance_label: 'pod',
 
-    // The label used to differentiate between different nodes (i.e. servers).
-    per_node_label: 'instance',
 
     // These are used by the dashboards and allow for the simultaneous display of
     // microservice and single binary loki clusters.
@@ -30,13 +39,16 @@
     },
 
     // Grouping labels, to uniquely identify and group by {jobs, clusters}
-    job_labels: ['datacenter', 'namespace', 'service'],
-    cluster_labels: ['datacenter', 'namespace'],
+    job_labels: ['cluster', $._config.per_namespace_label, $._config.per_job_label],
+    cluster_labels: ['cluster', $._config.per_namespace_label],
 
     _group: {
       // Each group prefix is composed of `_`-separated labels
       group_prefix_jobs: makePrefix($._config.job_labels),
       group_prefix_clusters: makePrefix($._config.cluster_labels),
+
+      group_instance_alert_labels: makeAlertLabels([$._config.per_job_label, $._config.per_instance_label]),
+      group_cluster_alert_labels: makeAlertLabels($._config.cluster_labels),
 
       // Each group-by label list is `, `-separated and unique identifies
       group_by_job: makeGroupBy($._config.job_labels),
